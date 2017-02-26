@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean validPhone;
     private boolean validInterval;
     private boolean Started;
-//    String phoneNumberSMS;
-//    String messageSMS;
+    public static String phoneNumberSMS;
+    public static String messageSMS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +57,25 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
                 validateInput();
                 if(validInput&&!Started){
-                    Started = true;
-                    button.setText("Stop");
-                    intent.putExtra("alarm", "Texting" + phoneNumber.getText() + " :  " + message.getText());
-                    pendingIntent = PendingIntent.getBroadcast(MainActivity.this, INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                    String phoneNumberSMS = phoneNumber.getText().toString();
-                    String messageSMS = message.getText().toString();
-                    start(phoneNumberSMS, messageSMS);
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
+                            Manifest.permission.SEND_SMS)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                                Manifest.permission.SEND_SMS)) {
+                        } else {
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.SEND_SMS},
+                                    MY_PERMISSIONS_REQUEST_SEND_SMS);
+                        }
+                    }else {
+                        Started = true;
+                        button.setText("Stop");
+                        intent.putExtra("alarm", "Texting" + phoneNumber.getText() + " :  " + message.getText());
+                        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        phoneNumberSMS = phoneNumber.getText().toString();
+                        messageSMS = message.getText().toString();
+                        start(phoneNumberSMS, messageSMS);
+                    }
                 }else if(Started){
                     Started = false;
                     button.setText("Start");
