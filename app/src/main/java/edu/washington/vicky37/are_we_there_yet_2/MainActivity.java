@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
     private void start(String phoneNumberSMS, String messageSMS) {
         int interval = Integer.parseInt(minutes.getText().toString()) * 1000 * 60;
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumberSMS, null, messageSMS, null, null);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(MainActivity.this, "Sent ", Toast.LENGTH_SHORT).show();
     }
 
