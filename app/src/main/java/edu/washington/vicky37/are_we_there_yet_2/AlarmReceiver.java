@@ -24,24 +24,4 @@ public class AlarmReceiver extends BroadcastReceiver {
         smsManager.sendTextMessage(phonenumber, null, message, null, null);
 
     }
-
-    public void sendMessage(String number, String message, Context context) {
-        Intent sentIntent = new Intent("sent");
-        PendingIntent sentPI = PendingIntent.getBroadcast(context, 0, sentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        context.registerReceiver(new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (getResultCode() == Activity.RESULT_OK) {
-                    Toast.makeText(context, "Send Successful!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Send Failed...", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new IntentFilter("sent"));
-
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(number, null, message, sentPI, null);
-    }
 }
